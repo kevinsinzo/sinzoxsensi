@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SinzoxSenzi</title>
+    <style>
+        :root {
+            --bg-color: #0b0914;
+            --card-bg: #13111c;
+            --text-color: #ffffff;
+            --accent-color: #9d4edd;
+            --aquamarine: #7fffd4;
+            --aquamarine-glow: rgba(127, 255, 212, 0.4);
+            --border-color: #241f33;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 25px rgba(157, 78, 221, 0.15);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Header Section */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .brand {
+            font-size: 19px;
+            font-weight: bold;
+            color: var(--text-color);
+            letter-spacing: 0.5px;
+        }
+
+        .brand span {
+            color: var(--accent-color);
+        }
+
+        .top-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            background: #1e192c;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 8px 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .whatsapp-link {
+            color: var(--aquamarine);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            background: rgba(127, 255, 212, 0.08);
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--aquamarine);
+        }
+
+        /* Status Bar */
+        .status-bar {
+            background: #171324;
+            padding: 12px 15px;
+            border-radius: 12px;
+            font-size: 13px;
+            color: #ccc;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .status-dot {
+            height: 8px;
+            width: 8px;
+            background-color: #00ff66;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px #00ff66;
+        }
+
+        /* Section Heading */
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 25px 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-color);
+        }
+
+        /* Sensi Packs Cards */
+        .pack-card {
+            background: #181424;
+            border: 1px solid var(--border-color);
+            padding: 15px 20px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .pack-card:hover {
+            border-color: var(--accent-color);
+        }
+
+        .pack-card.active {
+            background: rgba(127, 255, 212, 0.05);
+            border-color: var(--aquamarine);
+            box-shadow: 0 0 15px var(--aquamarine-glow);
+        }
+
+        .pack-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .pack-sub {
+            font-size: 11px;
+            color: #9c95b0;
+            margin-top: 3px;
+        }
+
+        .pack-price {
+            font-weight: bold;
+            color: #fff;
+            background: #231e33;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Features Box */
+        .features-box {
+            background: #171324;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .features-box h3 {
+            margin-top: 0;
+            font-size: 15px;
+            color: var(--aquamarine);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .features-list li {
+            font-size: 12px;
+            color: #d0c9e2;
+            background: #1b1629;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-color);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Modal Overlay for Checkout */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-content {
+            background: #151120;
+            border: 1px solid var(--border-color);
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .modal-body label {
+            font-size: 12px;
+            color: #aaa;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .modal-input {
+            width: 100%;
+            background: #1c172c;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .modal-input:focus {
+            border-color: var(--accent-color);
+            outline: none;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 20px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .pay-upi-btn {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            text-align: center;
+            display: block;
+        }
+
+        .send-wa-btn {
+            background: #25d366;
+            color: #000;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            text-align: center;
+            display: block;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 11px;
+            color: #6c6384;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="brand">Sinzox<span>Senzi</span></div>
+            <div class="top-controls">
+                <button class="theme-btn">🌙</button>
+                <a href="https://wa.me/918373959854" class="whatsapp-link">📞 +918373959854</a>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span class="status-dot"></span>
+            <span>• All system operational • 24/7 support</span>
+        </div>
+
+        <!-- Sensi Packs Section -->
+        <div class="section-title">⚡️ SENSI PACKS</div>
+
+        <div class="pack-card" onclick="openCheckout('BASIC PACK', '249₹')">
+            <div>
+                <div class="pack-name">📂 BASIC</div>
+            </div>
+            <div class="pack-price">249₹</div>
+        </div>
+
+        <div class="pack-card" onclick="openCheckout('ADVANCED PACK', '349₹')">
+            <div>
+                <div class="pack-name">📂 ADVANCED</div>
+            </div>
+            <div class="pack-price">349₹</div>
+        </div>
+
+        <div class="pack-card" onclick="openCheckout('PREMIUM PACK', '549₹')">
+            <div>
+                <div class="pack-name">💴 PREMIUM</div>
+            </div>
+            <div class="pack-price">549₹</div>
+        </div>
+
+        <div class="pack-card" onclick="openCheckout('VIPxSENSI PACK', '749₹')">
+            <div>
+                <div class="pack-name">💴 VIPxSENSI</div>
+            </div>
+            <div class="pack-price">749₹</div>
+        </div>
+
+        <div class="pack-card" onclick="openCheckout('SINZOXSENSI PACK', '999₹')">
+            <div>
+                <div class="pack-name">🇧🇷 SINZOXSENSI</div>
+                <div class="pack-sub">99% Head-Track</div>
+            </div>
+            <div class="pack-price">999₹</div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features-box">
+            <h3>🔶 FEATURES 🔶</h3>
+            <ul class="features-list">
+                <li>🏴‍☠️ REGEDITS</li>
+                <li>🏴‍☠️ HEAD-TRACKING</li>
+                <li>🏴‍☠️ CUSTOMIZED DPI</li>
+                <li>🏴‍☠️ TOUCH ENHANCER</li>
+                <li>🏴‍☠️ AIM LOCKING SENSI</li>
+                <li>🏴‍☠️ DRAG TECHNIQUES</li>
+                <li>🏴‍☠️ SETEDIT COMMANDS</li>
+                <li>🏴‍☠️ PHONE OPTIMIZATION</li>
+                <li>🏴‍☠️ LAG FIX + FPS BOOSTER</li>
+                <li>🏴‍☠️ (TALKBACK/SWITCH ACCESS)</li>
+                <li>🏴‍☠️ SENSI ACCORDING TO ALL GUNS</li>
+                <li>🏴‍☠️ AND MORE</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            sinzoxsenzi.github.io
+        </div>
+    </div>
+
+    <!-- Checkout Modal Popup -->
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Checkout</span>
+                <button class="close-btn" onclick="closeCheckout()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: 600;">
+                    <span id="modalItemName">Pack Name</span>
+                    <span id="modalItemPrice" style="color: var(--aquamarine);">₹0</span>
+                </div>
+                
+                <label>WhatsApp number / Telegram username</label>
+                <input type="text" id="userInput" class="modal-input" placeholder="e.g. 8373959854">
+
+                <label>Device model (e.g. iPhone 12 Pro)</label>
+                <input type="text" id="deviceInput" class="modal-input" placeholder="e.g. iPhone 12 Pro">
+
+                <div class="total-row">
+                    <span>Total</span>
+                    <span id="modalTotal" style="color: var(--aquamarine);">₹0</span>
+                </div>
+
+                <button type="button" class="pay-upi-btn" onclick="payWithUpi()">PAY WITH UPI</button>
+                <button type="button" class="send-wa-btn" onclick="sendWhatsAppOrder()">SEND ORDER ON WHATSAPP</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedPack = '';
+        let selectedPrice = '';
+
+        function openCheckout(name, price) {
+            selectedPack = name;
+            selectedPrice = price;
+            document.getElementById('modalItemName').innerText = name;
+            document.getElementById('modalItemPrice').innerText = price;
+            document.getElementById('modalTotal').innerText = price;
+            
+            document.getElementById('userInput').value = '';
+            document.getElementById('deviceInput').value = '';
+
+            document.getElementById('checkoutModal').style.display = 'flex';
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutModal').style.display = 'none';
+        }
+
+        function payWithUpi() {
+            const cleanAmount = selectedPrice.replace(/[^0-9]/g, '');
+            const upiId = "8373959854@kotakbank";
+            const upiLink = `upi://pay?pa=${upiId}&pn=SinzoxSenzi&am=${cleanAmount}&cu=INR`;
+            
+            // Try opening UPI app directly
+            window.location.href = upiLink;
+
+            // Fallback: Agar browser me app open na ho toh 1.5 second baad UPI ID aur amount screen par dikha do taaki user manual pay kar sake
+            setTimeout(() => {
+                alert(`Agar UPI app open nahi hua, toh is UPI ID par payment karein:\n\nUPI ID: ${upiId}\nAmount: ₹${cleanAmount}\n\nPayment karne ke baad WhatsApp par screenshot aur details zaroor bhejein!`);
+            }, 1500);
+        }
+
+        function sendWhatsAppOrder() {
+            const user = document.getElementById('userInput').value.trim();
+            const device = document.getElementById('deviceInput').value.trim();
+
+            if (!user) {
+                alert('Please enter your WhatsApp number or Telegram username!');
+                document.getElementById('userInput').focus();
+                return;
+            }
+
+            const message = `Hello SINZOXSENSI ❤️\n\nOrder:\n${selectedPack} - ${selectedPrice}\n\nTotal: ${selectedPrice}\nContact: ${user}\nDevice: ${device || 'Not provided'}`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            const waLink = `https://wa.me/918373959854?text=${encodedMessage}`;
+            
+            window.location.href = waLink;
+        }
+    </script>
+
+</body>
+</html>
