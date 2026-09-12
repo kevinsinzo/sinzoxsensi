@@ -477,7 +477,15 @@
                 return;
             }
 
-            const message = `Hello SinzoXSensi STORE 👋\n\nOrder:\n${selectedPack} - ${selectedPrice}\n\nTotal: ${selectedPrice}\nDevice: ${user}\nRam&Rom: ${Device || 'Not provided'}`;
+                const message = 
+`Hello SinzoXSenzi STORE 👏
+
+Order:
+${selectedPack} - ${selectedPrice}
+
+Total: ${selectedPrice}
+Device: ${user}
+Ram&Rom: ${device || 'Not provided'}`;
             
             const encodedMessage = encodeURIComponent(message);
             const waLink = `https://wa.me/918373959854?text=${encodedMessage}`;
