@@ -1,6 +1,421 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>SinzoxSensi</title>
+<style>
+  :root {
+    --bg: #060409;
+    --glow: rgba(124, 58, 237, 0.24);
+    --card: #100d18;
+    --card-border: #1f1a2c;
+    --row: #15111f;
+    --row-border: #221c31;
+    --pill: #1d1829;
+    --text: #f4f2fa;
+    --muted: #9a94ab;
+    --brand: #a55cf5;
+    --brand2: #6ee7c7;
+    --mint: #6ee7c7;
+    --green: #22c55e;
+    --blue: #1a73e8;
+    --gold: #f0c987;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); height: 100%; }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 100vh;
+  }
+  .page { min-height: 100vh; display: flex; }
+  .frame {
+    position: relative;
+    flex: 1;
+    margin: 14px;
+    max-width: 480px;
+    margin-left: auto; margin-right: auto;
+    border-radius: 36px;
+    border: 1.5px solid rgba(155, 92, 245, 0.5);
+    background:
+      radial-gradient(130% 45% at 50% -6%, rgba(124, 58, 237, 0.22), transparent 60%),
+      #0a0712;
+    padding: 58px 22px 30px;
+    display: flex; flex-direction: column;
+  }
+  .brand-wrap { position: relative; z-index: 1; text-align: center; }
+  .brand { display: flex; align-items: center; justify-content: center; gap: 9px; font-size: 32px; font-weight: 800; letter-spacing: .2px; }
+  .brand .s { color: var(--brand); }
+  .badge {
+    width: 27px; height: 27px; border-radius: 50%; background: var(--blue);
+    display: inline-grid; place-items: center; box-shadow: 0 0 16px rgba(26, 115, 232, 0.65); flex: none;
+  }
+  .badge svg { width: 14px; height: 14px; }
+
+  .menu { display: grid; gap: 18px; margin-top: 48px; position: relative; z-index: 1; }
+  .menu-btn {
+    appearance: none; width: 100%; text-align: left; cursor: pointer;
+    display: flex; align-items: center; gap: 16px;
+    background: rgba(20, 14, 32, 0.55);
+    border: 1.5px solid rgba(147, 92, 245, 0.5); border-radius: 24px;
+    padding: 24px 20px; color: var(--text); font: inherit;
+    box-shadow: 0 0 22px rgba(124, 58, 237, 0.18);
+    transition: transform .2s ease, border-color .18s ease;
+  }
+  .menu-btn:active, .menu-btn.tapped { transform: scale(.96); }
+  .menu-btn:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+  .menu-btn .icon { flex: none; width: 24px; height: 24px; display: inline-grid; place-items: center; }
+  .menu-btn .icon svg { width: 24px; height: 24px; filter: drop-shadow(0 0 6px rgba(165,92,245,0.6)); }
+  .menu-btn .divider { width: 1px; align-self: stretch; background: rgba(147, 92, 245, 0.35); }
+  .menu-btn .label { flex: 1; font-weight: 800; font-size: 17px; letter-spacing: .4px; text-transform: uppercase; }
+  .menu-btn .chev { color: var(--brand); font-size: 22px; flex: none; line-height: 1; }
+
+  /* full-screen site viewer */
+  .site-view {
+    position: fixed; inset: 0; background: var(--bg); z-index: 50;
+    display: flex; flex-direction: column;
+    transform: translateY(100%) scale(.97); opacity: 0;
+    transition: transform .38s cubic-bezier(.16,1,.3,1), opacity .3s ease;
+    pointer-events: none;
+  }
+  .site-view.active { transform: translateY(0) scale(1); opacity: 1; pointer-events: auto; }
+  .site-view .bar {
+    display: flex; align-items: center; gap: 10px;
+    padding: calc(10px + env(safe-area-inset-top, 0px)) 14px 10px;
+    background: var(--card); border-bottom: 1px solid var(--card-border); flex: none;
+  }
+  .site-view .bar button {
+    appearance: none; border: 1px solid var(--row-border); background: var(--row); color: var(--text);
+    border-radius: 12px; padding: 8px 14px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .site-view .bar .title { font-weight: 800; font-size: 14px; color: var(--muted); }
+  .site-view iframe { flex: 1; width: 100%; border: 0; background: #fff; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="frame">
+    <div class="brand-wrap">
+      <div class="brand">
+        <span>Sinzox<span class="s">Sensi</span></span>
+        <span class="badge" aria-label="Verified">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 2 L4 14h6l-1 8 9-12h-6z" fill="#fff"/></svg>
+        </span>
+      </div>
+    </div>
+
+    <div class="menu">
+      <button class="menu-btn" id="btn-free" type="button">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#c9a6ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="1.5"/><path d="M3 8h18v4H3z"/><path d="M12 8v13"/><path d="M12 8c-1.5-3-3.5-4-5-3s-1 3.5 0 3zM12 8c1.5-3 3.5-4 5-3s1 3.5 0 3z"/></svg>
+        </span>
+        <span class="divider"></span>
+        <span class="label">Free Sensi</span>
+        <span class="chev">›</span>
+      </button>
+      <button class="menu-btn" id="btn-paid" type="button">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#c9a6ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l3 5-9 13L3 8z"/><path d="M3 8h18"/><path d="M9 3l-2 5 5 13 5-13-2-5"/></svg>
+        </span>
+        <span class="divider"></span>
+        <span class="label">Paid Sensi</span>
+        <span class="chev">›</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- FREE SENSI full-screen viewer -->
+<div class="site-view" id="view-free">
+  <div class="bar">
+    <button type="button" data-close="free">‹ Back</button>
+    <span class="title">FREE SENSI</span>
+  </div>
+  <iframe id="frame-free" title="Free Sensi"></iframe>
+</div>
+
+<!-- PAID SENSI full-screen viewer -->
+<div class="site-view" id="view-paid">
+  <div class="bar">
+    <button type="button" data-close="paid">‹ Back</button>
+    <span class="title">PAID SENSI</span>
+  </div>
+  <iframe id="frame-paid" title="Paid Sensi"></iframe>
+</div>
+
+<!-- Original site sources, kept verbatim, stored as inert text so they load unmodified into their iframe -->
+<textarea id="src-free" style="display:none" aria-hidden="true"><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>SinzoxSensi</title>
+<style>
+  :root {
+    --bg: #0a0710;
+    --glow: rgba(124, 58, 237, 0.22);
+    --card: #100d18;
+    --card-border: #1f1a2c;
+    --row: #15111f;
+    --row-border: #221c31;
+    --pill: #1d1829;
+    --text: #f4f2fa;
+    --muted: #9a94ab;
+    --brand: #a55cf5;
+    --mint: #6ee7c7;
+    --green: #22c55e;
+    --blue: #1a73e8;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background:
+      radial-gradient(120% 60% at 0% 0%, var(--glow), transparent 60%),
+      radial-gradient(120% 60% at 100% 100%, var(--glow), transparent 60%),
+      var(--bg);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; padding: 22px 16px 40px; }
+  .shell {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 26px;
+    padding: 22px 18px 20px;
+    box-shadow: 0 0 60px rgba(124, 58, 237, 0.10);
+  }
+
+  /* header */
+  .brand { display: flex; align-items: center; gap: 8px; padding: 2px 8px 0; font-size: 18px; font-weight: 700; letter-spacing: .1px; }
+  .brand .s { color: var(--brand); }
+  .badge { width: 19px; height: 19px; border-radius: 50%; background: var(--blue); display: inline-grid; place-items: center; }
+  .badge svg { width: 11px; height: 11px; }
+
+  .status {
+    margin-top: 16px; padding: 13px 16px; border-radius: 16px;
+    background: var(--row); border: 1px solid var(--row-border);
+    display: flex; align-items: center; gap: 12px; font-size: 15px; color: #d9d5e6;
+  }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); flex: none; }
+
+  h2 { font-size: 19px; font-weight: 800; letter-spacing: .3px; margin: 26px 0 14px 4px; }
+
+  /* pack buttons */
+  .packs { display: grid; gap: 12px; }
+  .pack {
+    appearance: none; width: 100%; text-align: left; cursor: pointer;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    background: var(--row); border: 1px solid var(--row-border); border-radius: 18px;
+    padding: 20px 16px; color: var(--text); font: inherit;
+    transition: transform .12s ease, border-color .12s ease, background .12s ease;
+  }
+  .pack:active { transform: scale(.985); background: #1a1527; }
+  .pack:focus-visible, .back:focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+  .pack .name { font-weight: 800; font-size: 17px; letter-spacing: .2px; }
+  .pack .sub { display: block; font-weight: 400; font-size: 13.5px; color: var(--muted); margin-top: 6px; }
+  .tag {
+    background: var(--pill); border-radius: 12px; padding: 10px 14px;
+    font-weight: 700; font-size: 15px; color: var(--mint); flex: none;
+  }
+
+  /* features */
+  .features { margin-top: 30px; border: 1px solid var(--card-border); border-radius: 20px; padding: 18px 14px 14px; background: #110e1a; }
+  .features h3 { margin: 0 0 16px; text-align: center; color: var(--mint); font-size: 17px; font-weight: 800; letter-spacing: .5px; }
+  .features ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .features li {
+    display: flex; align-items: center; gap: 12px; padding: 13px 14px;
+    background: var(--row); border: 1px solid var(--row-border); border-radius: 12px;
+    font-size: 14px; color: #c9c4d8; letter-spacing: .2px;
+  }
+  .features li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); flex: none; }
+  .foot { text-align: center; color: #6d6780; font-size: 13.5px; margin-top: 22px; }
+
+  /* sensi view */
+  .view[hidden] { display: none; }
+  .back {
+    appearance: none; border: 1px solid var(--row-border); background: var(--row); color: var(--text);
+    border-radius: 12px; padding: 9px 14px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .detail-head { margin: 22px 4px 16px; }
+  .detail-head h1 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: .2px; }
+  .detail-head p { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+  .sensi-box { border: 1px solid var(--row-border); background: var(--row); border-radius: 20px; padding: 6px 16px; }
+  .sensi-row { display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--row-border); font-size: 15px; }
+  .sensi-row:last-child { border-bottom: 0; }
+  .sensi-row .k { font-weight: 700; letter-spacing: .3px; color: #ddd9ea; }
+  .sensi-row .v { font-weight: 800; font-variant-numeric: tabular-nums; display: flex; align-items: center; gap: 8px; }
+  .sensi-row .v .num { font-size: 17px; }
+  .sensi-row .v .no { color: #ff6b6b; }
+  .view-in { animation: in .18s ease-out; }
+  @keyframes in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .view-in { animation: none; } .pack { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="shell">
+
+    <!-- HOME -->
+    <div id="home" class="view">
+      <div class="brand">
+        <span>Sinzox<span class="s">Sensi</span></span>
+        <span class="badge" aria-label="Verified">
+          <svg viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.3l2.4 2.4 4.6-5"/></svg>
+        </span>
+      </div>
+
+      <div class="status"><span class="dot"></span><span>All system operational • 24/7 support</span></div>
+
+      <h2>SENSI PACKS⚡</h2>
+      <div class="packs" id="packs"></div>
+
+      <section class="PHONE SETTINGS">
+        <h3>PHONE SETTING</h3>
+        <ul>
+          <li>POINTER SPEED ~ 100%</li>
+          <li>LARGE MOUSE CURSOR ~ ON</li>
+          <li>TOUCH & HOLD DELAY ~ SHORT</li>
+          <li>ANIMATION SCALE ~ 0.5x (3)</li>
+        </ul>
+      </section>
+      <div class="foot">SinzoxSensi 🏴‍☠️</div>
+    </div>
+
+    <!-- SENSI DETAIL -->
+    <div id="detail" class="view" hidden>
+      <button class="back" id="back" type="button">‹ Back</button>
+      <div class="detail-head">
+        <h1 id="d-title"></h1>
+        <p>Free sensi</p>
+      </div>
+      <div class="sensi-box" id="d-box"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  var PACKS = [
+    { id: "4", icon: "📂", name: "4 GB RAM", sensi: [
+      ["DPI", "523", true], ["FIRE BUTTON", "47", true], ["GENERAL", "182", true], ["RED DOT", "0", true],
+      ["2X SCOPE", "190", true], ["4X SCOPE", "200", true], ["SNIPER SCOPE", "195", true], ["FREE CAMERA BUTTON", "200", true]
+    ]},
+    { id: "6", icon: "📂", name: "6 GB RAM", sensi: [
+      ["DPI", "480", true], ["FIRE BUTTON", "47", true], ["GENERAL", "175", true], ["RED DOT", "0", true],
+      ["2X SCOPE", "178", true], ["4X SCOPE", "184", true], ["SNIPER SCOPE", "155", true], ["FREE CAMERA BUTTON", "170", true]
+    ]},
+    { id: "8", icon: "📂", name: "8 GB RAM", sensi: [
+      ["DPI", "440", true], ["FIRE BUTTON", "53", true], ["GENERAL", "163", true], ["RED DOT", "0", true],
+      ["2X SCOPE", "160", true], ["4X SCOPE", "134", true], ["SNIPER SCOPE", "135", true], ["FREE CAMERA BUTTON", "150", true]
+    ]},
+    { id: "12", icon: "📂", name: "12 GB RAM", sensi: [
+      ["DPI", "NO", false], ["FIRE BUTTON", "53", true], ["GENERAL", "133", true], ["RED DOT", "0", true],
+      ["2X SCOPE", "122", true], ["4X SCOPE", "110", true], ["SNIPER SCOPE", "80", true], ["FREE CAMERA BUTTON", "90", true]
+    ]}
+  ];
+
+  var home = document.getElementById("home");
+  var detail = document.getElementById("detail");
+  var packsEl = document.getElementById("packs");
+  var titleEl = document.getElementById("d-title");
+  var boxEl = document.getElementById("d-box");
+
+  PACKS.forEach(function (p) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "pack";
+    b.setAttribute("data-id", p.id);
+    var left = document.createElement("span");
+    var n = document.createElement("span");
+    n.className = "name";
+    n.textContent = p.icon + " " + p.name.toUpperCase();
+    left.appendChild(n);
+    if (p.note) {
+      var s = document.createElement("span");
+      s.className = "sub";
+      s.textContent = p.note;
+      left.appendChild(s);
+    }
+    var t = document.createElement("span");
+    t.className = "tag";
+    t.textContent = "FREE";
+    b.appendChild(left);
+    b.appendChild(t);
+    b.addEventListener("click", function () { open(p.id, true); });
+    packsEl.appendChild(b);
+  });
+
+  function open(id, push) {
+    var p = PACKS.filter(function (x) { return x.id === id; })[0];
+    if (!p) return;
+    titleEl.textContent = p.name;
+    boxEl.textContent = "";
+    p.sensi.forEach(function (r) {
+      var row = document.createElement("div");
+      row.className = "sensi-row";
+      var k = document.createElement("span");
+      k.className = "k";
+      k.textContent = r[0];
+      var v = document.createElement("span");
+      v.className = "v";
+      var num = document.createElement("span");
+      num.className = r[2] ? "num" : "num no";
+      num.textContent = r[1];
+      var mark = document.createElement("span");
+      mark.textContent = r[2] ? "✅" : "❌";
+      v.appendChild(num);
+      v.appendChild(mark);
+      row.appendChild(k);
+      row.appendChild(v);
+      boxEl.appendChild(row);
+    });
+    home.hidden = true;
+    detail.hidden = false;
+    detail.classList.remove("view-in");
+    void detail.offsetWidth;
+    detail.classList.add("view-in");
+    window.scrollTo(0, 0);
+    if (push) { try { history.pushState({ pack: id }, ""); } catch (e) {} }
+  }
+
+  function close(fromPop) {
+    detail.hidden = true;
+    home.hidden = false;
+    window.scrollTo(0, 0);
+    if (!fromPop) { try { if (history.state && history.state.pack) history.back(); } catch (e) {} }
+  }
+
+  document.getElementById("back").addEventListener("click", function () { close(false); });
+  window.addEventListener("popstate", function () { close(true); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !detail.hidden) close(false); });
+</script>
+</body>
+</html>
+</textarea>
+
+<textarea id="src-paid" style="display:none" aria-hidden="true"><!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SinzoxSensi</title>
@@ -494,5 +909,51 @@ Ram&Rom: ${device || 'Not provided'}`;
         }
     </script>
 
+</body>
+</html>
+</textarea>
+
+<script>
+  function decodeEntities(str) {
+    var ta = document.createElement("textarea");
+    ta.innerHTML = str;
+    return ta.value;
+  }
+
+  var srcFree = decodeEntities(document.getElementById("src-free").value);
+  var srcPaid = decodeEntities(document.getElementById("src-paid").value);
+
+  var viewFree = document.getElementById("view-free");
+  var viewPaid = document.getElementById("view-paid");
+  var frameFree = document.getElementById("frame-free");
+  var framePaid = document.getElementById("frame-paid");
+
+  function openWithTap(btn, view, frame, src) {
+    btn.classList.add("tapped");
+    setTimeout(function () {
+      btn.classList.remove("tapped");
+      if (!frame.getAttribute("data-loaded")) {
+        frame.srcdoc = src;
+        frame.setAttribute("data-loaded", "1");
+      }
+      view.classList.add("active");
+    }, 150);
+  }
+
+  document.getElementById("btn-free").addEventListener("click", function () {
+    openWithTap(this, viewFree, frameFree, srcFree);
+  });
+
+  document.getElementById("btn-paid").addEventListener("click", function () {
+    openWithTap(this, viewPaid, framePaid, srcPaid);
+  });
+
+  document.querySelectorAll("[data-close]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var key = btn.getAttribute("data-close");
+      document.getElementById("view-" + key).classList.remove("active");
+    });
+  });
+</script>
 </body>
 </html>
